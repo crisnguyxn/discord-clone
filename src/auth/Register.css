@@ -1,0 +1,110 @@
+
+.form-container{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px !important;
+}
+.form-left{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-left img{
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    height: 600px;
+    width: 500px;
+}
+.form-right form{
+    display: flex;
+    flex-direction: column;
+}
+.form-right{
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.login-with-social button{
+    border-radius: 16px;
+    height: 28px;
+    width: 100px;
+    outline: none;
+    border:1px solid #3949AB;
+    background-color: white;
+    color:#3949AB;
+    margin-right:10px;
+}
+.form-right form button {
+    height: 28px;
+    width: 358px;
+    background-color: #3949AB;
+    color:white;
+    border-radius: 16px;
+    outline: none;
+    border:none;
+}
+.form-right form input{
+    height: 28px;
+    width: 358px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border:1px solid #3949AB ;
+    outline: none;
+}
+h3{
+    color:#3949AB;
+}
+.attribute{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.attribute button{
+    height: 28px;
+    width: 358px;
+    border: 1px solid #3949AB !important;
+    color:#3949AB;
+    background-color: white;
+    border-radius: 16px;
+    outline: none;
+    border:none;
+}
+.attribute span{
+    padding:5px;
+}
+.form-right span{
+    padding: 10px;
+}
+.form-right h1{
+    color:#3949AB;
+}
+.error p{
+    color:red;
+}
+.error{
+    display: flex;
+    width: 358px;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Poppins',sans-serif;
+}
+.error button {
+    border:none;
+    outline: none;
+    color:red ;
+    background-color: transparent;
+}
+
+.container{
+        background-color:#3949AB;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: 'Poppins',sans-serif;
+}
