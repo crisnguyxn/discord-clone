@@ -1,0 +1,12 @@
+.room{
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+    color:white;
+    font-weight: bold;
+}
+.room img{
+    margin-right: 10px;
+    padding:8px;
+    background-color: #3949AB;
+}

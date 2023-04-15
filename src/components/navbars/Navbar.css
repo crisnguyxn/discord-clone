@@ -1,0 +1,33 @@
+.navbars{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+.top-navbar{
+    margin-top: 8px;
+    border-bottom: 1px solid black;
+}
+.top-navbar img{
+    padding:8px;
+    border-radius: 50%;
+    background-color: gray;
+}
+.plus img{
+    background-color: gray;
+    border-radius: 50%;
+    padding: 16px;
+}
+.explore img{
+    background-color: gray;
+    border-radius: 50%;
+    padding:8px;
+}
+.channels{
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 80%;
+}

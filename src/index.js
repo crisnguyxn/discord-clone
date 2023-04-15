@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom'
 import Register from './auth/Register';
+import { HMSRoomProvider } from '@100mslive/react-sdk';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <HMSRoomProvider>
+      <RouterProvider router={router}/>
+    </HMSRoomProvider>
   </React.StrictMode>
 );
 

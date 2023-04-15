@@ -30,6 +30,10 @@ function Register() {
             password: inputValues.password,
           }
         );
+        localStorage.setItem("username",data.data.username)
+        localStorage.setItem("userId",data.data.userId)
+        document.cookie = "token=" + data.data.token
+        document.cookie = "roomToken=" + data.data.tokenRoom
         return navigate("/")
       } catch (error) {
         await handleError(error);
@@ -41,7 +45,7 @@ function Register() {
           inputValues
         );
         if (data.status === 201) {
-          await setisRegistered(true);
+          setisRegistered(true);
         }
       } catch (error) {
         await handleError(error);
