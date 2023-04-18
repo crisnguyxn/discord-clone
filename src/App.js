@@ -1,41 +1,45 @@
-import { useState } from 'react';
-import './App.css';
-import Mainbar from './components/mainbars/Mainbar';
-import Navbar from './components/navbars/Navbar';
-import PopupServer from './popup/PopupServer';
-import Channel from './components/channel/Channel';
+import { useState } from "react";
+import "./App.css";
+import Mainbar from "./components/mainbars/Mainbar";
+import Navbar from "./components/navbars/Navbar";
+import PopupServer from "./popup/PopupServer";
+import Channels from "./components/channel/Channels";
+import { ServerProvider } from "./context/ServerProvider";
 function App() {
+  const [isShow, setIsShow] = useState(false);
 
-  const [isShow, setIsShow] = useState(false)
-
-  const [rooms, setRooms] = useState([])
+  const [rooms, setRooms] = useState([]);
 
   const addServer = (room) => {
-    setRooms([...rooms,room])
-  }
+    setRooms([...rooms, room]);
+  };
 
   const createServer = (val) => {
-    setIsShow(val)
-  }
+    setIsShow(val);
+  };
 
   const closedPopup = (bool) => {
-    setIsShow(bool)
-  }
+    setIsShow(bool);
+  };
 
   return (
     <div className="app-container">
-      <div className='navbar'>
-        <Navbar onCreateServer= {createServer}/>
+      <div className="navbar">
+        <Navbar onCreateServer={createServer} servers={rooms} />
       </div>
-      <div className='mainbar'>
-        <Mainbar rooms={rooms}/>
-      </div>
-      <div className='channel'>
-        <Channel/>
-      </div>
-      {
-        isShow ? <PopupServer closedPopup={closedPopup} addServer={addServer} /> : ""
-      }
+      <ServerProvider>
+        <div className="mainbar">
+          <Mainbar/>
+        </div>
+        <div className="channel">
+          <Channels />
+        </div>
+      </ServerProvider>
+      {isShow ? (
+        <PopupServer closedPopup={closedPopup} addServer={addServer} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }

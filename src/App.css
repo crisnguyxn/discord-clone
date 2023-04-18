@@ -14,9 +14,8 @@ body{
   background-color:rgb(66, 65, 65);
 }
 .mainbar{
-  padding:10px;
   width: 280px;
-  background-color: gray;
+   background-color: rgb(51, 48, 48);
 }
 .channel{
   flex: 1;
