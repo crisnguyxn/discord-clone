@@ -13,6 +13,10 @@ const router = createBrowserRouter([
   {
     path:'/register',
     element:<Register/>
+  },
+  {
+    path:'/rooms/room/:id',
+    element:<App/>
   }
 ])
 

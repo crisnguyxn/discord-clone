@@ -1,6 +1,6 @@
 import { useVideo } from "@100mslive/react-sdk";
 
-function Peer({peer}){
+function Peer({peer,name}){
     const {videoRef} = useVideo({
         trackId:peer.videoTrack
     })
@@ -11,13 +11,13 @@ function Peer({peer}){
             ref={videoRef}
             className={`peer-video ${peer.isLocal ? "local" : ""}`}
             autoPlay
-            muted
+            muted={false}
             playsInline
         >
-        <div className="peer-name">
-           {peer.name}
-        </div>
         </video>
+        <div className="peer-name">
+           {name} {peer.isLocal ? "(Host)" : "(Viewer)"}
+        </div>
         </div>
     )
 }

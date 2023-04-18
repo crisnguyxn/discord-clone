@@ -3,13 +3,14 @@ import "./PopupServer.css";
 import { keys } from "../config/config";
 import { env } from "../config/envConfig";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function PopupServer(props) {
   const [inputValues, setinputValues] = useState({
     name: "",
     description: "",
     region: "IN",
   });
-
+  let navigate = useNavigate()
   const closedPopup = () => {
     props.closedPopup(false);
   };
@@ -19,43 +20,46 @@ function PopupServer(props) {
       [e.target.name]: e.target.value,
     }));
   };
-  if (document.cookie) {
-    const tokenVal = document.cookie.split(";");
-    var roomToken = tokenVal[1].split("=")[1];
-    var token = tokenVal[0].split("=")[1];
-  }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const userId = localStorage.getItem("userId");
-      const data = await axios.post(
-        "https://api.100ms.live/v2/rooms",
-        inputValues,
-        {
-          headers: {
-            Authorization: `Bearer ${roomToken}`,
+    if (document.cookie) {
+      try {
+        const colors = ["#E59866", "#2ECC71", "#48C9B0", "#E74C3C"];
+        const ranInd = Math.floor(Math.random() * colors.length);
+        const color = colors[ranInd];
+        const tokenVal = document.cookie.split(";");
+        const roomToken = tokenVal[1].split("=")[1];
+        const token = tokenVal[0].split("=")[1];
+        const userId = localStorage.getItem("userId");
+        const data = await axios.post(
+          "https://api.100ms.live/v2/rooms",
+          inputValues,
+          {
+            headers: {
+              Authorization: `Bearer ${roomToken}`,
+            },
+            env: env,
+          }
+        );
+        const dataRec = await data.data;
+        const resp = await axios.post(
+          `${keys.BASE_URL}/rooms/create`,
+          {
+            dataRec,
+            userId,
+            backgroundColor:color,
           },
-          env: env,
-        }
-      );
-      const dataRec = await data.data;
-      const resp = await axios.post(
-        `${keys.BASE_URL}/room/create`,
-        {
-          dataRec,
-          userId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      props.addServer(resp.data);
-    } catch (error) {
-      console.log(error);
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        props.addServer(resp.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    console.log(inputValues);
     closedPopup();
   };
 

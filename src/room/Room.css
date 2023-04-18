@@ -1,12 +1,25 @@
 .room{
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding-bottom: 8px;
     color:white;
     font-weight: bold;
 }
-.room img{
-    margin-right: 10px;
+.server img{
+    border-radius: 16px;
+    padding: 8px;
+}
+.style-link{
+    text-decoration: none !important;
+}
+.server .tooltiptext{
+    background-color: black;
     padding:8px;
-    background-color: #3949AB;
+    border-radius: 8px;
+    font-size: smaller;
+    visibility: hidden;
+    margin-left: 10px;
+}
+.server:hover .tooltiptext {
+    visibility: visible;
 }
