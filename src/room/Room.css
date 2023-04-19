@@ -19,6 +19,7 @@
     font-size: smaller;
     visibility: hidden;
     margin-left: 10px;
+    z-index: 1;
 }
 .server:hover .tooltiptext {
     visibility: visible;

@@ -50,37 +50,6 @@ header {
   justify-content: space-between;
 }
 
-form {
-  max-width: 450px;
-  margin: 30px auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border-radius: 8px;
-  padding: 20px;
-}
-
-input {
-  display: block;
-  width: 100%;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  height: 34px;
-  padding: 5px;
-  background: #37474f;
-  color: inherit;
-  font-family: inherit;
-}
-
-input::placeholder {
-  color: #aaa;
-}
-
-.input-container {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-}
-
 .btn-primary {
   border: 1px solid transparent;
   border-radius: 4px;

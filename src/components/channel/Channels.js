@@ -1,25 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { keys } from "../../config/config";
-import { ServerContext } from "../../context/ServerProvider";
-import Channel from "./Channel";
+import React from "react";
+import './Channel.css'
 
 function Channels() {
-  const [singleRoom, setSingleRoom] = useState();
-  const [roomId, setRoomId] = useContext(ServerContext);
   return (
-    <>
-      {roomId !== undefined ? (
-        <div className="conference-section">
-          <h2>Conference</h2>
-          <Channel channel={singleRoom}/>
-        </div>
-      ) : (
-        <div className="conference-section">
-            <h2>No connect to any room</h2>
-        </div>
-      )}
-    </>
+    <div className="channel">
+      <div className="channel-header">
+        <h3>check it</h3>
+      </div>
+      <div className="channel-main">
+        <h3>hihi</h3>
+      </div>
+      <div className="channel-footer">
+        <form>
+          <input type="text" placeholder="Send a message"/>
+        </form>
+      </div>
+    </div>
   );
 }
 

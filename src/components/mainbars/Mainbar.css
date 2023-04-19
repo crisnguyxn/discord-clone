@@ -32,7 +32,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding:10px 20px 10px 20px;
+    padding:5px 10px 5px 10px;
 }
 .room-name{
     display: flex;
@@ -47,4 +47,72 @@
 }
 .voice-room:hover .settings{
     visibility: visible;
+}
+.main-action{
+    max-height: 700px;
+    overflow-y: scroll;
+    position: relative;
+}
+.main-action::-webkit-scrollbar{
+    display: none;
+}
+.user-infos{
+    position: absolute;
+    bottom: 0;
+}
+.info-left img{
+    padding:10px;
+    background-color: black;
+    border-radius: 50%;
+}
+.info-left p {
+    margin-left: 5px;
+}
+.info-left{
+    display: flex;
+    align-items: center;
+}
+.info-right{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.info-right img{
+    height: 20px;
+    width: 20px;
+    margin-left:15px
+}
+.user-info{
+    background-color: rgb(46, 44,44);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 280px;
+    padding:5px;
+    border-top:1px solid gray
+}
+.action img{
+    padding:12px 23px 12px 23px;
+    background-color: rgb(46, 44, 44);
+}
+
+.noti{
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color:#279F52
+}
+.noti img{
+    margin:5px;
+}
+.room-name img{
+    margin:5px;
+}
+.connected-line{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(46, 44, 44);
+    padding:10px;
+    border-bottom: 1px solid gray
 }

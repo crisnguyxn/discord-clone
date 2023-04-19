@@ -1,0 +1,26 @@
+.channel-header{
+    border-bottom: 1px solid black;
+    height: 63px;
+}
+.channel-main{
+    flex:1;
+}
+.channel-footer{
+    border-top: 1px solid black;
+    height: 63px;
+    padding:0 20px;
+}
+.channel{
+    min-height: 100vh;
+    display: flex;
+    background-color: rgb(73, 71, 71);
+    flex-direction: column;
+}
+.channel-footer input{
+    background-color: rgb(54, 53, 53);
+    margin-top: 15px;
+    border:none;
+    outline: none;
+    padding:10px;
+    width: 100%;
+}
