@@ -7,11 +7,13 @@ import Channels from "./components/channel/Channels";
 import { ServerProvider } from "./context/ServerProvider";
 import { socket } from "./socket/socket";
 function App() {
-  console.log(socket);
   const [isShow, setIsShow] = useState(false);
   const [isFromMainbar, setIsFromMainBar] = useState(false)
   const [rooms, setRooms] = useState([]);
+  const [isGetMessage, setIsGetMessage] = useState(false)
   const [voiceRooms, setVoiceRooms] = useState([])
+  const [channelId, setChannelId] = useState()
+  const [roomName, setRoomName] = useState("")
   const addServer = (room) => {
     setRooms([...rooms, room]);
   };
@@ -33,25 +35,28 @@ function App() {
     setVoiceRooms([...voiceRooms,data])
   }
 
+  const getChannelId = (id) => {
+    setChannelId(id)
+  }
+
   return (
     <div className="app-container">
-      {/* <div className="navbar">
+      <div className="navbar">
         <Navbar onCreateServer={createServer} servers={rooms} />
       </div>
       <ServerProvider>
         <div className="mainbar">
-          <Mainbar createVoiceRoom={createServer} isFromMainbar={getNoti} voiceRooms={voiceRooms}/>
+          <Mainbar createVoiceRoom={createServer} isFromMainbar={getNoti} voiceRooms={voiceRooms} getChannelId={getChannelId}/>
         </div>
         <div className="channel">
-          <Channels />
+          <Channels channelId={channelId} roomName={roomName} />
         </div>
       </ServerProvider>
       {isShow ? (
         <PopupServer closedPopup={closedPopup} addServer={addServer} isFromMainbar={isFromMainbar} addRoom={addRoom}/>
       ) : (
         ""
-      )} */}
-      <h3>hi</h3>
+      )}
     </div>
   );
 }
