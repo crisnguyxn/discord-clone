@@ -16,7 +16,7 @@ import soundWave from "../../image/sound-waves.png";
 import startup from "../../image/startup.png";
 import music from "../../image/music.png";
 import call from "../../image/call.png";
-import io from 'socket.io-client'
+
 function Mainbar(props) {
   const [roomId] = useContext(ServerContext);
   const [room, setRoom] = useState();
@@ -33,7 +33,9 @@ function Mainbar(props) {
       setRoom(data.data.room);
     }
   };
-
+  const joinRoom = (id) => {
+    props.getChannelId(id)
+  }
   const getVoiceRoom = async () => {
     const data = await axios.get(`${keys.BASE_URL}/discord-rooms/${roomId}`);
     setPeers(data.data);
@@ -49,10 +51,6 @@ function Mainbar(props) {
   const createRoom = () => {
     props.createVoiceRoom(true);
     props.isFromMainbar(true);
-  };
-  const joinRoom = (roomID) => {
-    const newSocket = io('http://localhost:4000')
-    console.log(newSocket);
   };
   return (
     <div className="mainbar">
@@ -75,7 +73,7 @@ function Mainbar(props) {
                       className="voice-room"
                       onClick={() => joinRoom(peer._id)}
                     >
-                      <div className="room-name">
+                      <div  className="room-name">
                         <img src={dis} alt="" />
                         <p>{peer.name}</p>
                       </div>
