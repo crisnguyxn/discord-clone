@@ -3,6 +3,7 @@ import "./Channel.css";
 import axios from "axios";
 import { keys } from "../../config/config";
 import { socket } from "../../socket/socket";
+import moment from 'moment'
 
 function Channels(props) {
   const [msg, setMsg] = useState();
@@ -18,6 +19,7 @@ function Channels(props) {
     userId: localStorage.getItem("userId"),
     roomId: props.channelId,
     username: localStorage.getItem("username"),
+    createdAt:Date.now()
   };
 
   const handleSubmit = async (e) => {
@@ -33,7 +35,6 @@ function Channels(props) {
       console.log(error);
     }
   };
-
   const getChannelInfo = async () => {
     try {
       if(props.channelId !== undefined){
@@ -70,12 +71,13 @@ function Channels(props) {
       <div className="channel-header">
         <p>{name}</p>
       </div>
-      <div className="channel-main">
+      <div className="channel-main" id="channel-main">
       {
         msgList.map(msg => (
           <div className={(msg.userId === localStorage.getItem("userId")) ? "right-outer":"left-outer"} key={msg._id}>
             <div className={(msg.userId === localStorage.getItem("userId")) ? "right":"left"}>
               <p>{msg.message}</p>
+              <span>{moment(`${msg.createdAt}`).format('lll')}</span>
             </div>
           </div>
         ))

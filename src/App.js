@@ -5,12 +5,10 @@ import Navbar from "./components/navbars/Navbar";
 import PopupServer from "./popup/PopupServer";
 import Channels from "./components/channel/Channels";
 import { ServerProvider } from "./context/ServerProvider";
-import { socket } from "./socket/socket";
 function App() {
   const [isShow, setIsShow] = useState(false);
   const [isFromMainbar, setIsFromMainBar] = useState(false)
   const [rooms, setRooms] = useState([]);
-  const [isGetMessage, setIsGetMessage] = useState(false)
   const [voiceRooms, setVoiceRooms] = useState([])
   const [channelId, setChannelId] = useState()
   const [roomName, setRoomName] = useState("")
@@ -19,7 +17,6 @@ function App() {
   };
 
   const createServer = (value) => {
-    console.log(value);
     setIsShow(value);
   };
 
