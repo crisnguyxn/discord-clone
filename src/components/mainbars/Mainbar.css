@@ -76,6 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    position: relative;
 }
 .info-right img{
     height: 20px;
@@ -115,4 +116,19 @@
     background-color: rgb(46, 44, 44);
     padding:10px;
     border-bottom: 1px solid gray
+}
+.context{
+    width: 24px;
+    height: 3px;
+    background-color: red;
+    z-index: 1;
+    transform: rotate(-45deg);
+    top:0px;
+    position: absolute;
+}
+.mic {
+    right:68px;
+}
+.headphone{
+    right:32px;
 }
