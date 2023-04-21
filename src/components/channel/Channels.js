@@ -6,7 +6,7 @@ import { socket } from "../../socket/socket";
 import moment from 'moment'
 
 function Channels(props) {
-  const [msg, setMsg] = useState();
+  const [msg, setMsg] = useState("");
   const [msgList,setMsgList] = useState([])
   const [name, setName] = useState("")
   const handleChange = (e) => {
@@ -22,6 +22,10 @@ function Channels(props) {
     createdAt:Date.now()
   };
 
+  socket.on("notification", msg => {
+    alert(msg)
+  })
+
   const handleSubmit = async (e) => {
     setMsg("")
     e.preventDefault();
@@ -30,7 +34,7 @@ function Channels(props) {
         `${keys.BASE_URL}/discord-rooms/message`,
         value
       );
-      socket.emit('send message',data.data.data)
+      socket.emit('send message', props.channelId,data.data.data)
     } catch (error) {
       console.log(error);
     }
