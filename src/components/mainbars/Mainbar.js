@@ -25,6 +25,7 @@ function Mainbar(props) {
   const tokenVal = document.cookie.split(";");
   const token = tokenVal[0].split("=")[1];
   const [active, setActive] = useState(false);
+  
   const userStatus = {
     username: localStorage.getItem("username"),
     mic: true,
@@ -56,9 +57,12 @@ function Mainbar(props) {
       muteTag.classList.remove("headphone");
     }
   };
-
+  socket.on("send noti", (msg) => {
+    alert(msg)
+  })
   const toggleOnline = () => {
-    userStatus.online = !userStatus.online;
+    socket.emit("leave room", localStorage.getItem("username"),props.channelId)
+    setActive(false)
   };
   const getRoom = async () => {
     if (roomId !== undefined) {
@@ -71,17 +75,16 @@ function Mainbar(props) {
     }
   };
   const joinRoom = (id) => {
+    setActive(true)
     userStatus.online = !userStatus.online;
     socket.emit("userInformation", userStatus);
-    mainFunction(1000);
+    socket.emit("join room",id)
     props.getChannelId(id);
   };
   const mainFunction = (time) => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       let mediaRecorder = new MediaRecorder(stream);
       mediaRecorder.start();
-      setActive(mediaRecorder.stream.active);
-      console.log(mediaRecorder);
       var audioChunk = [];
       mediaRecorder.addEventListener("dataavailable", function (event) {
         audioChunk.push(event.data);

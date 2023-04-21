@@ -12,6 +12,7 @@ function App() {
   const [voiceRooms, setVoiceRooms] = useState([])
   const [channelId, setChannelId] = useState()
   const [roomName, setRoomName] = useState("")
+
   const addServer = (room) => {
     setRooms([...rooms, room]);
   };
@@ -35,7 +36,6 @@ function App() {
   const getChannelId = (id) => {
     setChannelId(id)
   }
-
   return (
     <div className="app-container">
       <div className="navbar">
@@ -43,10 +43,10 @@ function App() {
       </div>
       <ServerProvider>
         <div className="mainbar">
-          <Mainbar createVoiceRoom={createServer} isFromMainbar={getNoti} voiceRooms={voiceRooms} getChannelId={getChannelId}/>
+          <Mainbar createVoiceRoom={createServer} isFromMainbar={getNoti} voiceRooms={voiceRooms} getChannelId={getChannelId} channelId={channelId}/>
         </div>
         <div className="channel">
-          <Channels channelId={channelId} roomName={roomName} />
+          <Channels channelId={channelId} roomName={roomName}/>
         </div>
       </ServerProvider>
       {isShow ? (
