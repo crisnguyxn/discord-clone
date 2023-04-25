@@ -39,7 +39,7 @@
     background-color: white;
     color:#3949AB;
     margin-bottom: 5px;
-    width: 250px;
+    width: 400px;
     padding:10px;
     border-radius: 16px;
     word-wrap: break-word;
@@ -65,7 +65,7 @@ span{
 }
 .right-outer .right{
     background-color:#3949AB;
-    width: 250px;
+    width: 400px;
     padding:10px;
     border-radius: 16px;
     word-wrap: break-word;

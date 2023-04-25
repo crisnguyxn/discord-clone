@@ -9,9 +9,7 @@ function Channels(props) {
   const [msg, setMsg] = useState("");
   const [msgList, setMsgList] = useState([]);
   const [name, setName] = useState("");
-  const [showImg, setShowImg] = useState(false);
   const [files, setFiles] = useState([]);
-  const [imgs, setImgs] = useState([]);
   const handleChange = (e) => {
     let val = e.target.value;
     setMsg(val);
@@ -32,31 +30,26 @@ function Channels(props) {
   const handleSubmit = async (e) => {
     setMsg("");
     e.preventDefault();
-    setShowImg(false);
     try {
-      const data = await axios.post(
-        `${keys.BASE_URL}/discord-rooms/message`,
-        value
-      );
-      socket.emit("send message", props.channelId, data.data.data);
-      if (data) {
-        files.forEach(async (file) => {
-          const formData = new FormData();
-          formData.append("file", file);
-          const msgId = data.data.data._id;
-          formData.append("msgId", msgId);
-          const imgUploaded = await axios.post(
-            `${keys.BASE_URL}/upload-files`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-          console.log(imgUploaded);
-        });
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
       }
+      formData.append("message", value.message);
+      formData.append("userId", value.userId);
+      formData.append("roomId", value.roomId);
+      formData.append("username", value.username);
+      formData.append("createdAt", value.createdAt);
+      const msgUploaded = await axios.post(
+        `${keys.BASE_URL}/discord-rooms/message`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      socket.emit("send message", props.channelId, msgUploaded.data);
     } catch (error) {
       console.log(error);
     }
@@ -90,35 +83,12 @@ function Channels(props) {
     getMessages();
     getChannelInfo();
   }, [props.channelId]);
-  const reader = new FileReader();
-  const readFile = (file) => {
-    if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
-      setFiles([...files, file]);
-      let id = 0;
-      reader.addEventListener(
-        "load",
-        () => {
-          let img = {
-            src: reader.result,
-            id: id++,
-          };
-          setImgs([...imgs, img]);
-        },
-        false
-      );
-      reader.readAsDataURL(file);
-    }
+
+  const onChange = () => {
+    const files = document.querySelector("input[type=file]").files;
+    setFiles(files);
   };
-  const previewFile = (e) => {
-    let files = document.querySelector("input[type=file]").files;
-    const form = document.querySelector("form");
-    form.classList.add("new-form-style");
-    if (files) {
-      setShowImg(true);
-      Array.prototype.forEach.call(files, readFile);
-    }
-  };
-  socket.on("send message", (msg) => {
+  socket.on("send", (msg) => {
     setMsgList([...msgList, msg]);
   });
 
@@ -143,24 +113,29 @@ function Channels(props) {
               }
             >
               <p>{msg.message}</p>
+              {msg.images &&
+                msg.images.map((img) => (
+                  <div key={img._id} className="image">
+                    <img
+                      src={
+                        "data:" +
+                        img.img.contentType +
+                        ";base64," +
+                        img.img.data
+                      }
+                      alt={img.img._id}
+                      height={380}
+                      width={380}
+                    />
+                  </div>
+                ))}
               <span>{moment(`${msg.createdAt}`).format("lll")}</span>
             </div>
           </div>
         ))}
       </div>
       <div className="channel-footer">
-        <form onSubmit={handleSubmit}>
-          {showImg ? (
-            <div className="list-img">
-              {imgs.map((img) => (
-                <div key={img.imgKey}>
-                  <img src={img.src} alt="" height={400} width={400} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            ""
-          )}
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="input-field">
             <input
               type="text"
@@ -169,9 +144,15 @@ function Channels(props) {
               onChange={handleChange}
               placeholder="Send a message"
             />
-            <label htmlFor="file">
+            <label htmlFor="files">
               +
-              <input id="file" type="file" name="file" onChange={previewFile} />
+              <input
+                id="files"
+                type="file"
+                name="files"
+                multiple
+                onChange={onChange}
+              />
             </label>
           </div>
         </form>
