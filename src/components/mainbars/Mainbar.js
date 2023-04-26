@@ -25,7 +25,9 @@ function Mainbar(props) {
   const tokenVal = document.cookie.split(";");
   const token = tokenVal[0].split("=")[1];
   const [active, setActive] = useState(false);
-  
+  const [users, setUsers] = useState([]);
+  const [prevRoom, setPrevRoom] = useState("");
+
   const userStatus = {
     username: localStorage.getItem("username"),
     mic: true,
@@ -58,11 +60,15 @@ function Mainbar(props) {
     }
   };
   socket.on("send noti", (msg) => {
-    alert(msg)
-  })
+    alert(msg);
+  });
   const toggleOnline = () => {
-    socket.emit("leave room", localStorage.getItem("username"),props.channelId)
-    setActive(false)
+    socket.emit(
+      "leave room",
+      localStorage.getItem("username"),
+      props.channelId
+    );
+    setActive(false);
   };
   const getRoom = async () => {
     if (roomId !== undefined) {
@@ -74,49 +80,17 @@ function Mainbar(props) {
       setRoom(data.data.room);
     }
   };
+
   const joinRoom = (id) => {
-    setActive(true)
-    userStatus.online = !userStatus.online;
-    socket.emit("userInformation", userStatus);
-    socket.emit("join room",id)
+    setActive(true);
+    socket.emit("join room", id);
+    socket.emit("addUser", {
+      rId: id,
+      userId: localStorage.getItem("userId"),
+      username: localStorage.getItem("username"),
+    });
     props.getChannelId(id);
-  };
-  const mainFunction = (time) => {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      let mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      var audioChunk = [];
-      mediaRecorder.addEventListener("dataavailable", function (event) {
-        audioChunk.push(event.data);
-      });
-      mediaRecorder.addEventListener("stop", () => {
-        let audioBlob = new Blob(audioChunk);
-        audioChunk = [];
-        let fileReader = new FileReader();
-        fileReader.readAsDataURL(audioBlob);
-        fileReader.onloadend = () => {
-          let base64String = fileReader.result;
-          socket.emit("voice", base64String);
-        };
-
-        mediaRecorder.start();
-
-        setTimeout(() => {
-          mediaRecorder.stop();
-        }, time);
-      });
-      setTimeout(() => {
-        mediaRecorder.stop();
-      }, time);
-    });
-    socket.on("send", (data) => {
-      let audio = new Audio(data);
-      audio.play();
-    });
-
-    socket.on("userUpdated", (data) => {
-      console.log(data);
-    });
+    setPrevRoom(id);
   };
 
   const getVoiceRoom = async () => {
@@ -154,11 +128,27 @@ function Mainbar(props) {
                     <div
                       key={peer._id}
                       className="voice-room"
+                      id="room"
                       onClick={() => joinRoom(peer._id)}
                     >
                       <div className="room-name">
-                        <img src={dis} alt="" />
-                        <p>{peer.name}</p>
+                        <div className="channel-info">
+                          <img src={dis} alt="" />
+                          <p>{peer.name}</p>
+                        </div>
+                        <div className="user">
+                          {users &&
+                            users.map((user) =>
+                              peer._id === user.rId ? (
+                                <div key={user.userId} className="user-join">
+                                  <img src={dis} alt="" />
+                                  <p>{user.username}</p>
+                                </div>
+                              ) : (
+                                ""
+                              )
+                            )}
+                        </div>
                       </div>
                     </div>
                   ))
@@ -169,7 +159,7 @@ function Mainbar(props) {
               <img src={whiteplus} alt="" />
             </div>
             <div className="voice-room">
-              <div className="room-name">
+              <div className="title-room">
                 <img src={hash} alt="" />
                 <p>General</p>
               </div>

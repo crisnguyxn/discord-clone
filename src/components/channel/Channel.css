@@ -119,3 +119,23 @@ form{
     display: flex;
     align-items: center;
 }
+.input-field img{
+    background-color: rgb(54, 53, 53);
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 10px;
+}
+.record-field{
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px
+}
+audio{
+    width: 100%;
+    height: 40px;
+}
+audio::-webkit-media-controls-panel{
+    background-color: #102381;
+}
+
