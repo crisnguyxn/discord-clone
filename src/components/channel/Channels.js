@@ -4,12 +4,107 @@ import axios from "axios";
 import { keys } from "../../config/config";
 import { socket } from "../../socket/socket";
 import moment from "moment";
+import mic from "../../image/mic.png";
+import camera from "../../image/camera.png";
 
 function Channels(props) {
   const [msg, setMsg] = useState("");
   const [msgList, setMsgList] = useState([]);
   const [name, setName] = useState("");
   const [files, setFiles] = useState([]);
+  const [isRecording, setIsRecoding] = useState(false);
+  const [isVideoRec, setIsVideoRec] = useState(false);
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [videoSrc, setVideoSrc] = useState(null);
+  const audioConst = {
+    audio: true,
+  };
+  const videoConst = {
+    video: { height: 400, width: 400 },
+    audio: true,
+  };
+
+  const Recoding = (option) => {
+    if (option === "video") {
+      setIsVideoRec(true);
+    } else {
+      setIsRecoding(true);
+    }
+    getRecording(option);
+  };
+  const videoDep = {
+    audioBitsPerSecond: 128000,
+    videoBitsPerSecond: 2500000,
+    mimeType: "video/webm",
+  };
+  const getRecording = (option) => {
+    navigator.mediaDevices
+      .getUserMedia(option === "video" ? videoConst : audioConst)
+      .then((stream) => {
+        const recordService = new MediaRecorder(
+          stream,
+          option === "video" ? { videoDep } : null
+        );
+        recordService.start();
+        let chunks = [];
+        const video = document.getElementById("videoPrev");
+        if (option === "video") {
+          video.srcObject = stream;
+          video.onloadedmetadata = () => {
+            video.play();
+          };
+        }
+
+        const send = document.getElementById("send");
+        send.onclick = (e) => {
+          recordService.stop();
+          if (option === "video") {
+            video.onloadedmetadata = () => {
+              video.remove();
+            };
+            setIsVideoRec(false);
+          } else {
+            setIsRecoding(false);
+          }
+        };
+
+        const stop = document.getElementById("stop");
+
+        stop.onclick = (e) => {
+          if (option === "video") {
+            video.onloadedmetadata = () => {
+              video.remove();
+            };
+            setAudioSrc(null)
+            setIsVideoRec(false);
+          } else {
+            setIsRecoding(false);
+          }
+        };
+
+        recordService.onstop = () => {
+          const contentType = (option === "video") ? "video/webm" : "audio/ogg"
+          let blob = new Blob(chunks,{type:contentType})
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(blob);
+          fileReader.onloadend = (e) => {
+            const result = fileReader.result;
+            if (option === "video") {
+              video.src = result;
+              setVideoSrc(blob);
+            } else {
+              setAudioSrc(result);
+            }
+          };
+          chunks = []
+        };
+
+        recordService.addEventListener("dataavailable", (e) => {
+          chunks.push(e.data);
+        });
+      });
+  };
+
   const handleChange = (e) => {
     let val = e.target.value;
     setMsg(val);
@@ -40,16 +135,34 @@ function Channels(props) {
       formData.append("roomId", value.roomId);
       formData.append("username", value.username);
       formData.append("createdAt", value.createdAt);
-      const msgUploaded = await axios.post(
-        `${keys.BASE_URL}/discord-rooms/message`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      socket.emit("send message", props.channelId, msgUploaded.data);
+      if (audioSrc !== null) {
+        formData.append("audioVoice", audioSrc);
+      }
+      if (videoSrc !== null) {
+        formData.append("files", videoSrc);
+      }
+      if (
+        formData.get("message") !== null ||
+        formData.get("audioVoice") !== null ||
+        formData.get("files") !== null ||
+        formData.get("videoSrc") !== null
+      ) {
+        const msgUploaded = await axios.post(
+          `${keys.BASE_URL}/discord-rooms/message`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        socket.emit("send message", props.channelId, msgUploaded.data);
+        setAudioSrc(null);
+        setVideoSrc(null);
+        setFiles([])
+      } else {
+        alert("send something");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -89,6 +202,7 @@ function Channels(props) {
     setFiles(files);
   };
   socket.on("send", (msg) => {
+    console.log(msg);
     setMsgList([...msgList, msg]);
   });
 
@@ -123,12 +237,27 @@ function Channels(props) {
                         ";base64," +
                         img.img.data
                       }
-                      alt={img.img._id}
+                      alt={img._id}
                       height={380}
                       width={380}
                     />
                   </div>
                 ))}
+              {msg.audio && (
+                <audio controls className="audio">
+                  <source src={msg.audio}></source>
+                </audio>
+              )}
+              {
+                msg.videos && 
+                msg.videos.map(video => (
+                  <div key={video._id}>
+                    <video controls height={380} width={380}>
+                      <source src={"data:" + video.video.contentType + ";base64," +video.video.data}></source>
+                    </video>
+                  </div>
+                ))
+              }
               <span>{moment(`${msg.createdAt}`).format("lll")}</span>
             </div>
           </div>
@@ -136,6 +265,24 @@ function Channels(props) {
       </div>
       <div className="channel-footer">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
+          {isRecording ? (
+            <div className="record-field">
+              <p>Recording...</p>
+              <label id="stop">X</label>
+              <label id="send">OK</label>
+            </div>
+          ) : (
+            ""
+          )}
+          {isVideoRec ? (
+            <div className="video-field">
+              <video id="videoPrev"></video>
+              <label id="stop">X</label>
+              <label id="send">OK</label>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="input-field">
             <input
               type="text"
@@ -153,6 +300,12 @@ function Channels(props) {
                 multiple
                 onChange={onChange}
               />
+            </label>
+            <label onClick={() => Recoding("audio")}>
+              <img src={mic} alt="" />
+            </label>
+            <label onClick={() => Recoding("video")}>
+              <img src={camera} alt="" />
             </label>
           </div>
         </form>
