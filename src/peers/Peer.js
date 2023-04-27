@@ -4,7 +4,6 @@ function Peer({peer,name}){
     const {videoRef} = useVideo({
         trackId:peer.videoTrack
     })
-    console.log(peer.name,'check')
     return(
         <div className="peer-container">
         <video

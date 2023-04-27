@@ -12,8 +12,8 @@
 }
 .channel-footer{
     border-top: 1px solid black;
-    height: 63px;
     padding:0 20px;
+    padding-top: 10px;
 }
 .channel{
     min-height: 100vh;
@@ -21,13 +21,14 @@
     background-color: rgb(73, 71, 71);
     flex-direction: column;
 }
+
 .channel-footer input{
     background-color: rgb(54, 53, 53);
-    margin-top: 15px;
     border:none;
     outline: none;
-    padding:10px;
-    width: 100%;
+    height: 40px;
+    width: 95%;
+    padding-left: 10px;
 }
 .left-outer{
     flex-grow: 1;
@@ -38,7 +39,7 @@
     background-color: white;
     color:#3949AB;
     margin-bottom: 5px;
-    width: 250px;
+    width: 400px;
     padding:10px;
     border-radius: 16px;
     word-wrap: break-word;
@@ -64,7 +65,7 @@ span{
 }
 .right-outer .right{
     background-color:#3949AB;
-    width: 250px;
+    width: 400px;
     padding:10px;
     border-radius: 16px;
     word-wrap: break-word;
@@ -78,3 +79,63 @@ span{
     padding:20px;
     font-weight: bold;
 }
+form label{
+    height: 40px;
+    width: 40px;
+    color:white;
+    background-color: rgb(54, 53, 53);
+    border-radius: 50%;
+    outline: none;
+    border:none;
+    font-size: 20px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+form label input{
+    display: none;
+}
+form{
+    width: 100%;
+    padding-bottom: 11px;
+}
+
+.new-form-style{
+    position: relative;
+}
+.list-img img{
+    max-height: 400px;
+    max-width: 400px;
+}
+.list-img{
+    height: 450px;
+    overflow-y: scroll;
+}
+.list-img::-webkit-scrollbar{
+    display: none;
+}
+.input-field{
+    display: flex;
+    align-items: center;
+}
+.input-field img{
+    background-color: rgb(54, 53, 53);
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 10px;
+}
+.record-field{
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px
+}
+audio{
+    width: 100%;
+    height: 40px;
+}
+audio::-webkit-media-controls-panel{
+    background-color: #102381;
+}
+
