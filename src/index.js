@@ -4,20 +4,25 @@ import App from './App';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom'
 import Register from './auth/Register';
 import { HMSRoomProvider } from '@100mslive/react-sdk';
+import ErrorPage from './error/ErrorPage';
+import Channels from './components/channel/Channels';
 
 const router = createBrowserRouter([
   {
     path:'/',
-    element:<App/>,    
+    element:<App/>,  
+    errorElement:<ErrorPage/>,
+    children: [
+      {
+        path:'/rooms/room/:id',
+        element:<Channels/>
+      }
+    ],
   },
   {
     path:'/register',
     element:<Register/>
   },
-  {
-    path:'/rooms/room/:id',
-    element:<App/>
-  }
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

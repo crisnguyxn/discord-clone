@@ -1,0 +1,13 @@
+#error-page{
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+.errors{
+    display: block;
+    color: white;
+    font-size: 30px;
+}
