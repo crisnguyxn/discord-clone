@@ -1,6 +1,19 @@
 .channel-header{
     border-bottom: 1px solid black;
     height: 63px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.channel-header button{
+    border:none;
+    outline: none;
+    border-radius: 10px;
+    background-color: darkgreen;
+    color:white;
+    height:50px;
+    margin-right: 10px;
+    padding:0 5px 0 5px;
 }
 .channel-main{
     flex:1;
@@ -137,5 +150,16 @@ audio{
 }
 audio::-webkit-media-controls-panel{
     background-color: #102381;
+}
+.video-container{
+    flex:1;
+    margin-right: 10px;
+    position: relative;
+}
+.call-style{
+    display: flex;
+}
+msg-container{
+    display: none;
 }
 

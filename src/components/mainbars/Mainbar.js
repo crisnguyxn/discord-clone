@@ -81,15 +81,18 @@ function Mainbar(props) {
     }
   };
 
-  const joinRoom = (id) => {
+  const joinRoom = (id,bool) => {
+    console.log(id);
     setActive(true);
-    socket.emit("join room", id);
+    if(bool){
+      socket.emit("join-text-room", id);
+    }
     socket.emit("addUser", {
       rId: id,
       userId: localStorage.getItem("userId"),
       username: localStorage.getItem("username"),
     });
-    props.getChannelId(id);
+    props.getChannelId(id,bool);
     setPrevRoom(id);
   };
 
@@ -105,8 +108,8 @@ function Mainbar(props) {
     getRoom();
   }, [roomId]);
 
-  const createRoom = () => {
-    props.createVoiceRoom(true);
+  const createRoom = (option) => {
+    props.createVoiceRoom(true, option);
     props.isFromMainbar(true);
   };
   return (
@@ -120,52 +123,83 @@ function Mainbar(props) {
           <div className="main-action">
             <div className="action-voice">
               <p>TEXT CHANNELS</p>
-              <img onClick={() => createRoom()} src={whiteplus} alt="" />
+              <img onClick={() => createRoom("text")} src={whiteplus} alt="" />
             </div>
             <div className="list-user">
               {peers.length > 0
-                ? peers.map((peer) => (
-                    <div
-                      key={peer._id}
-                      className="voice-room"
-                      id="room"
-                      onClick={() => joinRoom(peer._id)}
-                    >
-                      <div className="room-name">
-                        <div className="channel-info">
-                          <img src={dis} alt="" />
-                          <p>{peer.name}</p>
-                        </div>
-                        <div className="user">
-                          {users &&
-                            users.map((user) =>
-                              peer._id === user.rId ? (
-                                <div key={user.userId} className="user-join">
-                                  <img src={dis} alt="" />
-                                  <p>{user.username}</p>
-                                </div>
-                              ) : (
-                                ""
-                              )
-                            )}
+                ? peers.map((peer) =>
+                    peer.isText ? (
+                      <div
+                        key={peer._id}
+                        className="voice-room"
+                        id="room"
+                        onClick={() => joinRoom(peer._id,peer.isText)}
+                      >
+                        <div className="room-name">
+                          <div className="channel-info">
+                            <img src={dis} alt="" />
+                            <p>{peer.name}</p>
+                          </div>
+                          <div className="user">
+                            {users &&
+                              users.map((user) =>
+                                peer._id === user.rId ? (
+                                  <div key={user.userId} className="user-join">
+                                    <img src={dis} alt="" />
+                                    <p>{user.username}</p>
+                                  </div>
+                                ) : (
+                                  ""
+                                )
+                              )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    ) : (
+                      ""
+                    )
+                  )
                 : ""}
             </div>
             <div className="action-voice">
               <p>VOICE CHANNELS</p>
-              <img src={whiteplus} alt="" />
+              <img src={whiteplus} onClick={() => createRoom("voice")} alt="" />
             </div>
-            <div className="voice-room">
-              <div className="title-room">
-                <img src={hash} alt="" />
-                <p>General</p>
-              </div>
-              <div className="settings">
-                <img src={settings} alt="" />
-              </div>
+            <div className="list-user">
+              {peers.length > 0
+                ? peers.map((peer) =>
+                    peer.isText === false ? (
+                      <div
+                        key={peer._id}
+                        className="voice-room"
+                        id="room"
+                        onClick={() => joinRoom(peer._id,peer.isText)}
+                      >
+                        <div className="room-name">
+                          <div className="channel-info">
+                            <img src={mic} alt="" />
+                            <p>{peer.name}</p>
+                          </div>
+                          <div className="user">
+                            {users &&
+                              users.map((user) =>
+                                peer._id === user.rId ? (
+                                  <div key={user.userId} className="user-join">
+                                    <img src={dis} alt="" />
+                                    <p>{user.username}</p>
+                                  </div>
+                                ) : (
+                                  ""
+                                )
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  )
+                : ""}
             </div>
             <div id="videoGrid"></div>
           </div>
@@ -196,7 +230,7 @@ function Mainbar(props) {
               <div className="info-right">
                 <img src={mic} onClick={() => toggleMic()} alt="" />
                 <span id="contextMic"></span>
-                <img onClick={() => toggleMute()} src={headphone} alt="" />
+                <img src={headphone} onClick={() => toggleMute()} alt="" />
                 <span id="contextMute"></span>
                 <img src={settings} alt="" />
               </div>

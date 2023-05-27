@@ -37,12 +37,13 @@ function Navbar(props) {
     props.onCreateServer(true);
   };
 
+
   return (
     <div className="navbars">
       <div className="top-navbar">
         <img src={logo} alt="" />
         <div className="plus">
-          <img onClick={() => createServer()} src={plus} alt="" />
+          <img src={plus} alt="" />
         </div>
         <div className="explore">
           <img src={explore} alt="" />

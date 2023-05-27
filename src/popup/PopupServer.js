@@ -60,12 +60,13 @@ function PopupServer(props) {
     }
     closedPopup();
   };
-  const createVoiceRoom = async (e) => {
+  const createTextRoom = async (e) => {
     e.preventDefault();
     const data = await axios.post(`${keys.BASE_URL}/discord-rooms/create`, {
       name: inputValues.name,
       userId: localStorage.getItem("userId"),
       roomId: params.id,
+      isText: (props.type === "text") ? true : false
     });
     props.addRoom(data.data);
     closedPopup();
@@ -77,7 +78,7 @@ function PopupServer(props) {
         <h3>{props.isFromMainbar ? "Create Room" : "Create Server"}</h3>
         <button onClick={() => closedPopup()}>X</button>
       </div>
-      <form onSubmit={!props.isFromMainbar ? handleSubmit : createVoiceRoom}>
+      <form onSubmit={!props.isFromMainbar ? handleSubmit : createTextRoom}>
         <div className="fields">
           <input
             placeholder={props.isFromMainbar ? "Create Room" : "Create Server"}
